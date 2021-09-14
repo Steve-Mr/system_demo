@@ -2,6 +2,7 @@ package com.example.system_demo.repository;
 
 import com.example.system_demo.service.service_score;
 import com.example.system_demo.util.util;
+import com.example.system_demo.util.util_score_calculator;
 
 import java.sql.*;
 
@@ -10,6 +11,15 @@ public class repository_score {
     public service_score getServiceScore(int serviceID){
         Connection connection = util.initConnection();
         service_score score = null;
+
+        try {
+            util_score_calculator.Calculator_service_info(serviceID);
+            util_score_calculator.Calculator_service_process(serviceID);
+            util_score_calculator.Calculator_service_evaluate(serviceID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         String sql = "select * from service_score where serviceID = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
