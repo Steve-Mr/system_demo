@@ -13,9 +13,7 @@ public class repository_score {
         service_score score = null;
 
         try {
-            util_score_calculator.Calculator_service_info(serviceID);
-            util_score_calculator.Calculator_service_process(serviceID);
-            util_score_calculator.Calculator_service_evaluate(serviceID);
+            util_score_calculator.updateServiceScore(serviceID);
         } catch (SQLException e) {
             e.printStackTrace();
         }

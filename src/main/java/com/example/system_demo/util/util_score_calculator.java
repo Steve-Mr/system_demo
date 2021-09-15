@@ -1,10 +1,7 @@
 package com.example.system_demo.util;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class util_score_calculator {
 
@@ -12,7 +9,7 @@ public class util_score_calculator {
             Arrays.asList("serviceName", "serviceIntro", "servicePeople")
     );
 
-    private static final  Set<String> score_7 = new HashSet<String>(
+    private static final  Set<String> score_7 = new HashSet<>(
             Arrays.asList("servicePhone", "serviceDuration", "servicePrice", "serviceProcedure", "serviceApplicable")
     );
 
@@ -20,7 +17,7 @@ public class util_score_calculator {
             Arrays.asList("serviceCategory", "servicePicture", "serviceLogo")
     );
 
-    public static boolean Calculator_service_info(int serviceID) throws SQLException {
+    public static int Calculator_service_info(int serviceID) throws SQLException {
         int score = 100;
         ArrayList<String> blanks = new ArrayList<>();
 
@@ -35,6 +32,7 @@ public class util_score_calculator {
                 }
             }
         }
+        resultSet.close();
 
         for (String blank : blanks){
             if (!score_0.contains(blank)){
@@ -44,14 +42,12 @@ public class util_score_calculator {
             }
         }
 
-        //TODO:insert or update score
-
         System.out.println(blanks);
         System.out.println(score);
-        return true;
+        return score;
     }
 
-    public static boolean Calculator_service_process(int serviceID) throws SQLException {
+    public static double Calculator_service_process(int serviceID) throws SQLException {
         String sql = "select * from service_process where serviceID = ?";
         ResultSet resultSet = util_score_calculator.getServiceResultSet(serviceID, sql);
         int num_rows = 0;
@@ -63,14 +59,14 @@ public class util_score_calculator {
                 case "A": sum += 10; break;
                 case "B": sum += 7; break;
                 case "C": sum += 3; break;
-                case "D": sum += 0; break;
+                case "D": break;
             }
 
             switch (resultSet.getString("processDispatchTime")){
                 case "A": sum += 10; break;
                 case "B": sum += 7; break;
                 case "C": sum += 3; break;
-                case "D": sum += 0; break;
+                case "D": break;
             }
 
             switch (resultSet.getString("processExecute")){
@@ -112,18 +108,14 @@ public class util_score_calculator {
                 case "B": sum -= 5; break;
                 case "C": sum += 10; break;
             }
-
-            //System.out.println(sum);
         }
+        resultSet.close();
 
         double score_process = (double) sum/num_rows;
 
         System.out.println(score_process);
-        //System.out.println(num_rows);
 
-        //TODO:insert or update score
-
-        return true;
+        return score_process;
     }
 
     private static final Set<String> scale_4 = new HashSet<>(
@@ -138,7 +130,7 @@ public class util_score_calculator {
             Arrays.asList("evaluateID", "userID", "serviceID")
     );
 
-    public static boolean Calculator_service_evaluate(int serviceID) throws SQLException {
+    public static Double Calculator_service_evaluate(int serviceID) throws SQLException {
         String sql = "select * from service_evaluate where serviceID = ?";
         ResultSet resultSet = util_score_calculator.getServiceResultSet(serviceID, sql);
 
@@ -151,27 +143,73 @@ public class util_score_calculator {
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             int columnCount = resultSetMetaData.getColumnCount();
             for (int i = 1; i<= columnCount; i++){
-                //System.out.println(resultSet.getObject(i));
+
                 String columnName = resultSetMetaData.getColumnName(i);
+
                 if (!scale_0.contains(columnName)){
+
                     int score = (int)resultSet.getObject(i);
 
                     if (scale_1.contains(columnName)) sum += score;
                     else if (scale_4.contains(columnName)) sum += 4 * score;
                     else sum += 2 * score;
+
+                    }
                 }
-            }
+        }
+        resultSet.close();
+
+        double score_evaluate = 0;
+        if (num_rows != 0){
+            score_evaluate = (double) sum/num_rows;
         }
 
-        System.out.println(num_rows);
-        System.out.println(sum);
+        return score_evaluate;
+    }
 
-        double score_evaluate = (double) sum/num_rows;
+    public static Boolean updateServiceScore(int serviceID) throws SQLException {
 
-        System.out.println(score_evaluate);
+        double score_info = Calculator_service_info(serviceID);
+        double score_proc = Calculator_service_process(serviceID);
+        double score_eval = Calculator_service_evaluate(serviceID);
 
+        double avg = (score_info + score_eval + score_proc)/3;
 
-        //TODO:insert or update score
+        String sql = "select * from service_score where serviceID = ?";
+        ResultSet resultSet = getServiceResultSet(serviceID, sql);
+
+        Connection connection = util.initConnection();
+        PreparedStatement preparedStatement;
+
+        if (resultSet.next()){
+
+            String sql_update =
+                    "update service_score set sumAvg = ?, sumAvg1 = ?, sumAvg2 = ?, sumAvg3 = ? where serviceID = ?";
+            preparedStatement = connection.prepareStatement(sql_update);
+            preparedStatement.setDouble(1, avg);
+            preparedStatement.setDouble(2, score_info);
+            preparedStatement.setDouble(3, score_proc);
+            preparedStatement.setDouble(4, score_eval);
+            preparedStatement.setInt(5, serviceID);
+
+        }else {
+
+            String sql_insert =
+                    "insert into service_score (serviceID, sumAvg, sumAvg1, sumAvg2, sumAvg3) values (?, ?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(sql_insert);
+            preparedStatement.setInt(1, serviceID);
+            preparedStatement.setDouble(2, avg);
+            preparedStatement.setDouble(3, score_info);
+            preparedStatement.setDouble(4, score_proc);
+            preparedStatement.setDouble(5, score_eval);
+
+        }
+        preparedStatement.executeUpdate();
+
+        preparedStatement.close();
+        connection.close();
+        resultSet.close();
+
         return true;
     }
 
@@ -180,6 +218,7 @@ public class util_score_calculator {
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, serviceID);
 
+        //TODO: close connection and preparedStatement
         return preparedStatement.executeQuery();
     }
 }
