@@ -22,7 +22,11 @@ public class util_score_calculator {
         ArrayList<String> blanks = new ArrayList<>();
 
         String sql = "select * from service where serviceID = ?";
-        ResultSet resultSet = util_score_calculator.getServiceResultSet(serviceID, sql);
+        Connection connection = util.initConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, serviceID);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
         if (resultSet.next()){
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             int columnCount = resultSetMetaData.getColumnCount();
@@ -32,7 +36,6 @@ public class util_score_calculator {
                 }
             }
         }
-        resultSet.close();
 
         for (String blank : blanks){
             if (!score_0.contains(blank)){
@@ -44,12 +47,18 @@ public class util_score_calculator {
 
         System.out.println(blanks);
         System.out.println(score);
+
+        util.close(connection, preparedStatement, resultSet);
+
         return score;
     }
 
     public static double Calculator_service_process(int serviceID) throws SQLException {
         String sql = "select * from service_process where serviceID = ?";
-        ResultSet resultSet = util_score_calculator.getServiceResultSet(serviceID, sql);
+        Connection connection = util.initConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, serviceID);
+        ResultSet resultSet = preparedStatement.executeQuery();
         int num_rows = 0;
         int sum = 0;
         while (resultSet.next()){
@@ -115,6 +124,8 @@ public class util_score_calculator {
 
         System.out.println(score_process);
 
+        util.close(connection, preparedStatement, resultSet);
+
         return score_process;
     }
 
@@ -132,7 +143,10 @@ public class util_score_calculator {
 
     public static Double Calculator_service_evaluate(int serviceID) throws SQLException {
         String sql = "select * from service_evaluate where serviceID = ?";
-        ResultSet resultSet = util_score_calculator.getServiceResultSet(serviceID, sql);
+        Connection connection = util.initConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, serviceID);
+        ResultSet resultSet = preparedStatement.executeQuery();
 
         int num_rows = 0;
         int sum = 0;
@@ -157,12 +171,13 @@ public class util_score_calculator {
                     }
                 }
         }
-        resultSet.close();
 
         double score_evaluate = 0;
         if (num_rows != 0){
             score_evaluate = (double) sum/num_rows;
         }
+
+        util.close(connection, preparedStatement, resultSet);
 
         return score_evaluate;
     }
@@ -176,49 +191,42 @@ public class util_score_calculator {
         double avg = (score_info + score_eval + score_proc)/3;
 
         String sql = "select * from service_score where serviceID = ?";
-        ResultSet resultSet = getServiceResultSet(serviceID, sql);
-
         Connection connection = util.initConnection();
-        PreparedStatement preparedStatement;
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, serviceID);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        Connection connection_update = util.initConnection();
+        PreparedStatement preparedStatement_update;
 
         if (resultSet.next()){
 
             String sql_update =
                     "update service_score set sumAvg = ?, sumAvg1 = ?, sumAvg2 = ?, sumAvg3 = ? where serviceID = ?";
-            preparedStatement = connection.prepareStatement(sql_update);
-            preparedStatement.setDouble(1, avg);
-            preparedStatement.setDouble(2, score_info);
-            preparedStatement.setDouble(3, score_proc);
-            preparedStatement.setDouble(4, score_eval);
-            preparedStatement.setInt(5, serviceID);
+            preparedStatement_update = connection_update.prepareStatement(sql_update);
+            preparedStatement_update.setDouble(1, avg);
+            preparedStatement_update.setDouble(2, score_info);
+            preparedStatement_update.setDouble(3, score_proc);
+            preparedStatement_update.setDouble(4, score_eval);
+            preparedStatement_update.setInt(5, serviceID);
 
         }else {
 
             String sql_insert =
                     "insert into service_score (serviceID, sumAvg, sumAvg1, sumAvg2, sumAvg3) values (?, ?, ?, ?, ?)";
-            preparedStatement = connection.prepareStatement(sql_insert);
-            preparedStatement.setInt(1, serviceID);
-            preparedStatement.setDouble(2, avg);
-            preparedStatement.setDouble(3, score_info);
-            preparedStatement.setDouble(4, score_proc);
-            preparedStatement.setDouble(5, score_eval);
+            preparedStatement_update = connection_update.prepareStatement(sql_insert);
+            preparedStatement_update.setInt(1, serviceID);
+            preparedStatement_update.setDouble(2, avg);
+            preparedStatement_update.setDouble(3, score_info);
+            preparedStatement_update.setDouble(4, score_proc);
+            preparedStatement_update.setDouble(5, score_eval);
 
         }
-        preparedStatement.executeUpdate();
+        preparedStatement_update.executeUpdate();
 
-        preparedStatement.close();
-        connection.close();
-        resultSet.close();
+        util.close(connection, preparedStatement, resultSet);
+        util.close(connection_update, preparedStatement_update, null);
 
         return true;
-    }
-
-    private static ResultSet getServiceResultSet(int serviceID, String sql) throws SQLException {
-        Connection connection = util.initConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1, serviceID);
-
-        //TODO: close connection and preparedStatement
-        return preparedStatement.executeQuery();
     }
 }
