@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class repository_score {
 
-    public service_score getServiceScore(int serviceID){
+    public static service_score getServiceScore(int serviceID){
         Connection connection = util.initConnection();
         service_score score = null;
 

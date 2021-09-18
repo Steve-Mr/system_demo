@@ -13,7 +13,6 @@ import java.util.Map;
 public class Servlet_service_list extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        repository_service repository_service = new repository_service();
 
         List<Map.Entry<Integer,String>> list_service = repository_service.getServiceList();
         if (list_service.size() != 0){
@@ -25,7 +24,7 @@ public class Servlet_service_list extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
     }
 }

@@ -182,7 +182,7 @@ public class util_score_calculator {
         return score_evaluate;
     }
 
-    public static Boolean updateServiceScore(int serviceID) throws SQLException {
+    public static void updateServiceScore(int serviceID) throws SQLException {
 
         double score_info = Calculator_service_info(serviceID);
         double score_proc = Calculator_service_process(serviceID);
@@ -227,6 +227,5 @@ public class util_score_calculator {
         util.close(connection, preparedStatement, resultSet);
         util.close(connection_update, preparedStatement_update, null);
 
-        return true;
     }
 }
