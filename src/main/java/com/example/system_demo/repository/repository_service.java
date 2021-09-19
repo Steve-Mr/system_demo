@@ -9,14 +9,12 @@ public class repository_service {
 
     public static ArrayList<Map.Entry<Integer, String>> getServiceList(){
         Connection connection = util.initConnection();
-        //ArrayList<String> list_service_name = new ArrayList<>();
         ArrayList<Map.Entry<Integer, String>> list_service_name = new ArrayList<>();
         String sql = "select serviceID,serviceName from service";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                //list_service_name.add(resultSet.getString("serviceName").trim());
                 list_service_name.add(new AbstractMap.SimpleEntry<>(
                         resultSet.getInt("serviceID"),
                         resultSet.getString("serviceName")));

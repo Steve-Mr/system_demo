@@ -1,6 +1,6 @@
 package com.example.system_demo.repository;
 
-import com.example.system_demo.service.service_score;
+import com.example.system_demo.model.model_score;
 import com.example.system_demo.util.util;
 import com.example.system_demo.util.util_score_calculator;
 
@@ -8,9 +8,9 @@ import java.sql.*;
 
 public class repository_score {
 
-    public static service_score getServiceScore(int serviceID){
+    public static model_score getServiceScore(int serviceID){
         Connection connection = util.initConnection();
-        service_score score = null;
+        model_score score = null;
 
         try {
             util_score_calculator.updateServiceScore(serviceID);
@@ -24,7 +24,7 @@ public class repository_score {
             preparedStatement.setInt(1,serviceID);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
-                score = new service_score();
+                score = new model_score();
                 score.setServiceID(serviceID);
                 score.setSumAvg(Double.parseDouble(resultSet.getString("sumAvg").trim()));
                 score.setSumAvg1(Double.parseDouble(resultSet.getString("sumAvg1").trim()));

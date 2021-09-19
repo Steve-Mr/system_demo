@@ -1,6 +1,6 @@
-package com.example.system_demo.service;
+package com.example.system_demo.model;
 
-public class service_evaluate {
+public class model_evaluate {
 
     private int evaluateID;
     private int evaluateDevice;
@@ -16,7 +16,7 @@ public class service_evaluate {
     private int userID;
     private int serviceID;
 
-    public service_evaluate() {
+    public model_evaluate() {
     }
 
     public int getEvaluateID() {

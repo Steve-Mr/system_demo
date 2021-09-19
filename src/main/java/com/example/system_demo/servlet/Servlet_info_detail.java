@@ -4,17 +4,13 @@ import com.example.system_demo.repository.repository_eval;
 import com.example.system_demo.repository.repository_process;
 import com.example.system_demo.repository.repository_score;
 import com.example.system_demo.repository.repository_service;
-import com.example.system_demo.service.service_score;
+import com.example.system_demo.model.model_score;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 @WebServlet(name = "Servlet_info_detail", value = "/Servlet_info_detail")
 public class Servlet_info_detail extends HttpServlet {
@@ -24,7 +20,7 @@ public class Servlet_info_detail extends HttpServlet {
         int serviceID = Integer.parseInt(request.getParameter("serviceID"));
         System.out.println(request.getParameter("serviceID"));
 
-        service_score score = repository_score.getServiceScore(serviceID);
+        model_score score = repository_score.getServiceScore(serviceID);
         if (score != null){
             request.setAttribute("msg_score_info", null);
             request.setAttribute("score_info", score);

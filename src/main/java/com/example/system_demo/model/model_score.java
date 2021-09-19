@@ -1,8 +1,8 @@
-package com.example.system_demo.service;
+package com.example.system_demo.model;
 
-public class service_score {
+public class model_score {
 
-    public service_score() {
+    public model_score() {
     }
 
     private int serviceID;

@@ -1,6 +1,6 @@
-package com.example.system_demo.service;
+package com.example.system_demo.model;
 
-public class service_process {
+public class model_process {
 
     private int processID;
     private int userID;
@@ -11,7 +11,7 @@ public class service_process {
     private String serviceRectify;
     private String processExecute;
 
-    public service_process() {
+    public model_process() {
     }
 
     public int getProcessID() {

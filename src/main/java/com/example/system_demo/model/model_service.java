@@ -1,6 +1,6 @@
-package com.example.system_demo.service;
+package com.example.system_demo.model;
 
-public class service_service {
+public class model_service {
 
     private int ServiceID;
     private String serviceName;
@@ -22,7 +22,7 @@ public class service_service {
     private String serviceProcedure;
     private String serviceLegalInfo;
 
-    public service_service() {
+    public model_service() {
     }
 
     public int getServiceID() {
