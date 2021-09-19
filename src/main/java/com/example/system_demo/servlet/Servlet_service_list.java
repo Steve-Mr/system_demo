@@ -25,6 +25,5 @@ public class Servlet_service_list extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-
     }
 }
