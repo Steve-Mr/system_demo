@@ -3,16 +3,16 @@ package com.example.system_demo.model;
 public class model_evaluate {
 
     private int evaluateID;
-    private int evaluateDevice;
-    private int evaluatePeople;
-    private int evaluateTimeExact;
-    private int evaluatePrice;
-    private int evaluateTimely;
-    private int evaluateRespond;
-    private int evaluateProcedure;
-    private int evaluateSupport;
-    private int evaluateClear;
-    private int evaluatePersonalize;
+    private int evaluateDevice; /*服务设施*/
+    private int evaluatePeople; /*人员素质*/
+    private int evaluateTimeExact; /*时间准确*/
+    private int evaluatePrice; /*价格合理*/
+    private int evaluateTimely; /*及时*/
+    private int evaluateRespond; /*相应明确*/
+    private int evaluateProcedure; /*流程合理认真*/
+    private int evaluateSupport; /*支持到位*/
+    private int evaluateClear; /*对象明确*/
+    private int evaluatePersonalize; /*个性化选择*/
     private int userID;
     private int serviceID;
 

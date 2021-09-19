@@ -2,25 +2,25 @@ package com.example.system_demo.model;
 
 public class model_service {
 
-    private int ServiceID;
-    private String serviceName;
-    private int serviceCategory;
-    private String serviceIntro;
-    private String servicePicture;
-    private String serviceLogo;
-    private String servicePeople;
-    private String serviceDevice;
-    private String servicePhone;
-    private String serviceDuration;
-    private Double servicePrice;
-    private String serviceApplicable;
-    private String servicePersonalize;
-    private String serviceConfirmation;
-    private String servicePost;
-    private String serviceComplaint;
-    private String serviceDispatchTime;
-    private String serviceProcedure;
-    private String serviceLegalInfo;
+    private int ServiceID; /*ID*/
+    private String serviceName; /*产品名称*/
+    private int serviceCategory; /*类别*/
+    private String serviceIntro; /*简介*/
+    private String servicePicture; /*图片*/
+    private String serviceLogo; /*Logo*/
+    private String servicePeople; /*服务人员资质介绍*/
+    private String serviceDevice; /*地点及设施*/
+    private String servicePhone; /*联系方式*/
+    private String serviceDuration; /*时常*/
+    private Double servicePrice; /*价格*/
+    private String serviceApplicable; /*适用对象*/
+    private String servicePersonalize; /*个性选择*/
+    private String serviceConfirmation; /*预约时间*/
+    private String servicePost; /*售后服务*/
+    private String serviceComplaint; /*投诉渠道*/
+    private String serviceDispatchTime; /*派单时间*/
+    private String serviceProcedure; /*流程*/
+    private String serviceLegalInfo; /*法律信息*/
 
     public model_service() {
     }

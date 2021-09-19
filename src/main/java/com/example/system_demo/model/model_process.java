@@ -5,11 +5,11 @@ public class model_process {
     private int processID;
     private int userID;
     private int serviceID;
-    private String processConfirmTime;
-    private String processDispatchTime;
-    private String Exception;
-    private String serviceRectify;
-    private String processExecute;
+    private String processConfirmTime; /*确认用时*/
+    private String processDispatchTime; /*派单用时*/
+    private String Exception; /*异常退出情况*/
+    private String serviceRectify; /*服务整改*/
+    private String processExecute; /*执行过程*/
 
     public model_process() {
     }

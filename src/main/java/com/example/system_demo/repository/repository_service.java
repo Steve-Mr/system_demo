@@ -26,14 +26,17 @@ public class repository_service {
         return list_service_name;
     }
 
+    /*十分的项目*/
     private static final Set<String> score_10 = new HashSet<>(
             Arrays.asList("serviceName", "serviceIntro", "servicePeople")
     );
 
+    /*七分的项目*/
     private static final  Set<String> score_7 = new HashSet<>(
             Arrays.asList("servicePhone", "serviceDuration", "servicePrice", "serviceProcedure", "serviceApplicable")
     );
 
+    /*不计分项目*/
     private static final  Set<String> score_0 = new HashSet<>(
             Arrays.asList("serviceID","serviceCategory", "servicePicture", "serviceLogo")
     );

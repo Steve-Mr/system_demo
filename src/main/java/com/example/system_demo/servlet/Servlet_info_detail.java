@@ -30,17 +30,7 @@ public class Servlet_info_detail extends HttpServlet {
 
         try {
             request.setAttribute("score_info_detail", repository_service.getServiceInfo_withScore(serviceID));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
             request.setAttribute("process_results_detail", repository_process.getProcessResults(serviceID));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
             request.setAttribute("eval_detail_stars", repository_eval.getServiceEvalStars(serviceID));
         } catch (SQLException e) {
             e.printStackTrace();

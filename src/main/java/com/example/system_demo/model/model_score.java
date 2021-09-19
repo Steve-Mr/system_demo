@@ -7,9 +7,9 @@ public class model_score {
 
     private int serviceID;
     private double sumAvg;
-    private double sumAvg1;
-    private double sumAvg2;
-    private double sumAvg3;
+    private double sumAvg1; /*info*/
+    private double sumAvg2; /*process*/
+    private double sumAvg3; /*eval*/
 
     public int getServiceID() {
         return serviceID;
