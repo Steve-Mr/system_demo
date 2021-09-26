@@ -15,7 +15,7 @@ import java.util.Set;
 public class FilterLoginChecker implements Filter {
 
     private static final Set<String> ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
-            Arrays.asList("", "/index.jsp", "/logout", "/Servlet_login")));
+            Arrays.asList("", "/login.jsp", "/logout", "/Servlet_login")));
 
     public void init(FilterConfig config) throws ServletException {
     }
@@ -39,7 +39,7 @@ public class FilterLoginChecker implements Filter {
             chain.doFilter(request, response);
         }
         else{
-            ((HttpServletResponse)response).sendRedirect( httpServletRequest.getContextPath()+ "/index.jsp");
+            ((HttpServletResponse)response).sendRedirect( httpServletRequest.getContextPath()+ "/login.jsp");
         }
     }
 }

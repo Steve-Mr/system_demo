@@ -32,7 +32,7 @@ public class Servlet_login extends HttpServlet {
             e.printStackTrace();
         }
 
-        String destPage = "/index.jsp";
+        String destPage = "/login.jsp";
         String message = null;
 
         HttpSession httpSession = request.getSession();
@@ -40,6 +40,12 @@ public class Servlet_login extends HttpServlet {
             httpSession.setAttribute("userID", userID);
             httpSession.setAttribute("userIdentify", user.getUserIdentify());
             destPage="Servlet_service_list";
+
+            Cookie cookie = new Cookie("autoLogin", userID + "-" + user.getUserIdentify());
+            cookie.setPath(request.getContextPath());
+            cookie.setMaxAge( 60 * 60 * 24 * 7);
+            response.addCookie(cookie);
+
         }else {
             httpSession.setAttribute("userIdentify",null);
             message = "Invalid user ID or password";
