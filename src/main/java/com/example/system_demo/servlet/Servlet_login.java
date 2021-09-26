@@ -25,20 +25,22 @@ public class Servlet_login extends HttpServlet {
         System.out.println(userID);
         System.out.println(password);
 
-        String destPage = "/index.jsp";
-        String message = null;
-
+        model_user user = null;
         try {
-            if (repository_user.checkLogin(userID, password)) {
-                HttpSession httpSession = request.getSession();
-                httpSession.setAttribute("userID", userID);
-                message = "true";
-                destPage = "Servlet_service_list";
-            }else {
-                message = "Invalid user ID or password";
-            }
+            user = repository_user.checkLogin(userID, password);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+
+        String destPage = "/index.jsp";
+        String message;
+
+        if (user != null){
+            HttpSession httpSession = request.getSession();
+            httpSession.setAttribute("userID", userID);
+            message = "true";
+        }else {
+            message = "Invalid user ID or password";
         }
 
         request.setAttribute("message", message);

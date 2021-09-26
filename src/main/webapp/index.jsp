@@ -13,6 +13,9 @@
         <br><br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" size="30" />
+        <c:if test="${message == 'true'}" >
+            <% response.sendRedirect("Servlet_service_list");%>
+        </c:if>
         <br>${message}
         <br><br>
         <button type="submit">Login</button>
