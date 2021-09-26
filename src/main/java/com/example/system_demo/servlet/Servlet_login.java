@@ -33,13 +33,15 @@ public class Servlet_login extends HttpServlet {
         }
 
         String destPage = "/index.jsp";
-        String message;
+        String message = null;
 
+        HttpSession httpSession = request.getSession();
         if (user != null){
-            HttpSession httpSession = request.getSession();
             httpSession.setAttribute("userID", userID);
-            message = "true";
+            httpSession.setAttribute("userIdentify", user.getUserIdentify());
+            destPage="Servlet_service_list";
         }else {
+            httpSession.setAttribute("userIdentify",null);
             message = "Invalid user ID or password";
         }
 
