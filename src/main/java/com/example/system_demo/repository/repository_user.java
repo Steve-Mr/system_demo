@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class repository_user {
 
-    public static model_user checkLogin(int userID, String password) throws SQLException {
+    public static boolean checkLogin(int userID, String password) throws SQLException {
         Connection connection = util.initConnection();
         String sql = "select * from user where userID = ? and userPwd = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -18,19 +18,10 @@ public class repository_user {
         preparedStatement.setString(2, password);
         ResultSet resultSet = preparedStatement.executeQuery();
 
-        model_user user = null;
-
-        if (resultSet.next()){
-            user = new model_user();
-            user.setUserID(resultSet.getInt("userID"));
-            user.setUserIdentify(resultSet.getInt("userIdentify"));
-            user.setUserName(resultSet.getString("userName"));
-            user.setUserPwd(resultSet.getString("userPwd"));
-            user.setUserAddr(resultSet.getString("userAddress"));
-        }
+        boolean result = resultSet.next();
 
         util.close(connection, preparedStatement, resultSet);
 
-        return user;
+        return result;
     }
 }
