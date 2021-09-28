@@ -59,7 +59,6 @@ public class repository_process {
 
         }
 
-
         return Arrays.asList(
                 num_rows,
                 num_finished,
@@ -69,5 +68,81 @@ public class repository_process {
                 num_unfinished_order_provider,
                 num_unfinished_deliver_user,
                 num_unfinished_deliver_provider);
+    }
+
+    public static double Calculator_service_process(int serviceID) throws SQLException {
+        String sql = "select * from service_process where serviceID = ?";
+        Connection connection = util.initConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, serviceID);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        int num_rows = 0;
+        int sum = 0;
+        while (resultSet.next()){
+            num_rows++;
+
+            switch (resultSet.getString("processConfirmTime")){
+                case "A": sum += 10; break;
+                case "B": sum += 7; break;
+                case "C": sum += 3; break;
+                case "D": break;
+            }
+
+            switch (resultSet.getString("processDispatchTime")){
+                case "A": sum += 10; break;
+                case "B": sum += 7; break;
+                case "C": sum += 3; break;
+                case "D": break;
+            }
+
+            switch (resultSet.getString("processExecute")){
+                case "A": sum += 5; break;
+                case "B": sum += 10; break;
+                case "C": sum += 15; break;
+                case "D": sum += 20; break;
+                case "E": sum += 25; break;
+                case "F": sum += 32; break;
+                case "G": sum += 40; break;
+            }
+
+            switch (resultSet.getString("processException")){
+                case "A":
+                case "B":
+                case "G":
+                case "L":
+                    sum += 30; break;
+                case "C": sum += 28; break;
+                case "D": sum += 25; break;
+                case "E": sum += 15; break;
+                case "F":
+                case "K":
+                    sum -= 5; break;
+                case "H": sum += 26; break;
+                case "I": sum += 17; break;
+                case "J":
+                case "N":
+                case "O":
+                    sum += 10; break;
+                case "M":
+                case "Q":
+                    sum -= 10; break;
+                case "P": sum += 5; break;
+            }
+
+            switch (resultSet.getString("serviceRectify")){
+                case "A": sum += 5; break;
+                case "B": sum -= 5; break;
+                case "C": sum += 10; break;
+            }
+        }
+        resultSet.close();
+
+        double score_process = (double) sum/num_rows;
+
+        System.out.println(score_process);
+
+        util.close(connection, preparedStatement, resultSet);
+
+        return score_process;
     }
 }

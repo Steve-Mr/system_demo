@@ -5,6 +5,8 @@ import com.example.system_demo.util.util;
 import java.sql.*;
 import java.util.*;
 
+import static com.example.system_demo.util.UTIL_CONSTANTS.*;
+
 public class repository_service {
 
     public static ArrayList<Map.Entry<Integer, String>> getServiceList(){
@@ -26,20 +28,64 @@ public class repository_service {
         return list_service_name;
     }
 
-    /*十分的项目*/
-    private static final Set<String> score_10 = new HashSet<>(
-            Arrays.asList("serviceName", "serviceIntro", "servicePeople")
-    );
+    public static ArrayList<Map.Entry<Integer, String>> getServiceList(String keyWord) throws SQLException {
 
-    /*七分的项目*/
-    private static final  Set<String> score_7 = new HashSet<>(
-            Arrays.asList("servicePhone", "serviceDuration", "servicePrice", "serviceProcedure", "serviceApplicable")
-    );
+        System.out.println(keyWord);
+        System.out.println("测试");
 
-    /*不计分项目*/
-    private static final  Set<String> score_0 = new HashSet<>(
-            Arrays.asList("serviceID","serviceCategory", "servicePicture", "serviceLogo")
-    );
+        Connection connection = util.initConnection();
+        ArrayList<Map.Entry<Integer, String>> list = new ArrayList<>();
+        String sql = "select serviceID, serviceName from service where serviceName like ?";
+        //String sql = "select serviceID, serviceName from service where serviceName = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        //preparedStatement.setString(1, keyWord);
+        preparedStatement.setString(1, "%" + keyWord + "%");
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            list.add(new AbstractMap.SimpleEntry<>(
+                    resultSet.getInt("serviceID"),
+                    resultSet.getString("serviceName")
+            ));
+        }
+        util.close(connection, preparedStatement, resultSet);
+        return list;
+    }
+
+    public static int Calculator_service_info(int serviceID) throws SQLException {
+        int score = 100;
+        ArrayList<String> blanks = new ArrayList<>();
+
+        String sql = "select * from service where serviceID = ?";
+        Connection connection = util.initConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, serviceID);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()){
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            int columnCount = resultSetMetaData.getColumnCount();
+            for (int i=1; i<=columnCount; i++){
+                if(resultSet.getObject(i) == null){
+                    blanks.add(resultSetMetaData.getColumnName(i));
+                }
+            }
+        }
+
+        for (String blank : blanks){
+            if (!score_0.contains(blank)){
+                if (score_10.contains(blank)) score -= 10;
+                else if (score_7.contains(blank)) score -= 7;
+                else score -= 5;
+            }
+        }
+
+        System.out.println(blanks);
+        System.out.println(score);
+
+        util.close(connection, preparedStatement, resultSet);
+
+        return score;
+    }
 
     public static ArrayList<Map.Entry<String, Integer>> getServiceInfo_withScore(int serviceID) throws SQLException {
 
@@ -81,6 +127,8 @@ public class repository_service {
                 }
             }
         }
+        util.close(connection, preparedStatement, resultSet);
         return list_info_withScore;
     }
+
 }
