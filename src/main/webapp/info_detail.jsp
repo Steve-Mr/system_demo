@@ -27,12 +27,13 @@
 
 服务产品评分详情：<br>
 <c:forEach items="${score_info_detail}" var="score_info_detail">
-    ${score_info_detail.getKey()} ${score_info_detail.getValue()} <br>
+    ${score_info_detail[1]} ${score_info_detail[2]} <br>
 </c:forEach>
-
 <br>
 <br>
-
+<img src="Servlet_image?imageType=INFO&serviceID=${service_id}" alt="产品服务信息得分图">
+<br>
+<br>
 服务过程结果详情：<br>
 
 <table>

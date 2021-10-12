@@ -33,4 +33,32 @@ public class UTIL_CONSTANTS {
             Arrays.asList("evaluateID", "userID", "serviceID")
     );
 
+    /**
+     * 有形性
+     */
+    public static final Set<String> tangibility = new HashSet<>(
+            Arrays.asList("serviceName", "serviceIntro", "servicePeople", "serviceDevice")
+    );
+
+
+    //可靠性
+    public static final Set<String> reliability = new HashSet<>(
+            Arrays.asList("servicePhone", "serviceDuration", "servicePrice", "servicePost", "serviceComplaint")
+    );
+
+    //响应性
+    public static final Set<String> responsiveness = new HashSet<>(
+            Arrays.asList("serviceConfirmation", "serviceDispatchTime")
+    );
+
+    //保证性
+    public static final Set<String> guarantee = new HashSet<>(
+            Arrays.asList("serviceProcedure", "serviceLeagalInfo")
+    );
+
+    //移情性
+    public static final Set<String> empathy = new HashSet<>(
+            Arrays.asList("serviceApplicable", "servicePersonalize")
+    );
+
 }

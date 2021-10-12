@@ -9,7 +9,7 @@ public class FilterEncoding implements Filter {
 
     private String encoding;
 
-    public void init(FilterConfig config) throws ServletException {
+    public void init(FilterConfig config) {
         encoding = config.getInitParameter("encoding");
         if (encoding == null){
             encoding = "UTF-8";

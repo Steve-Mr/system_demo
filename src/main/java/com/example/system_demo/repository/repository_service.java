@@ -1,11 +1,15 @@
 package com.example.system_demo.repository;
 
+import com.example.system_demo.util.SpiderChart;
 import com.example.system_demo.util.util;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.sql.*;
 import java.util.*;
 
 import static com.example.system_demo.util.UTIL_CONSTANTS.*;
+import static com.example.system_demo.util.util_graph.spiderChart;
 
 public class repository_service {
 
@@ -87,6 +91,8 @@ public class repository_service {
         return score;
     }
 
+    /*
+
     public static ArrayList<Map.Entry<String, Integer>> getServiceInfo_withScore(int serviceID) throws SQLException {
 
         ArrayList<Map.Entry<String,Integer>> list_info_withScore = new ArrayList<>();
@@ -129,6 +135,76 @@ public class repository_service {
         }
         util.close(connection, preparedStatement, resultSet);
         return list_info_withScore;
+    }
+
+     */
+
+    public static ArrayList<String[]> getServiceInfo_withScore(int serviceID) throws SQLException {
+
+        ArrayList<String[]> list_info_withScore = new ArrayList<>();
+
+        Connection connection = util.initConnection();
+        String sql = "select * from service where serviceID = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, serviceID);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()){
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            int columnCount = resultSetMetaData.getColumnCount();
+            for (int i = 1; i <= columnCount; i++){
+                String columnName = resultSetMetaData.getColumnName(i);
+                String columnValue = String.valueOf(resultSet.getObject(i));
+                if (!score_0.contains(columnName)){
+                    if (columnValue.matches("null")){
+                        list_info_withScore.add(new String[]{columnName, columnValue, "0"});
+                    }
+                    else if (score_10.contains(columnName)){
+                        list_info_withScore.add(new String[]{columnName, columnValue, "10"});
+                    }
+                    else if (score_7.contains(columnName)){
+                        list_info_withScore.add(new String[]{columnName, columnValue, "7"});
+                    }
+                    else {
+                        list_info_withScore.add(new String[]{columnName, columnValue, "5"});
+                    }
+                }
+            }
+        }
+        util.close(connection, preparedStatement, resultSet);
+        return list_info_withScore;
+    }
+
+    public static JFreeChart getServiceInfoChart(int serviceID) throws SQLException {
+
+        String chartTitle = "服务信息得分";
+
+        int[] infoChartValue = {0, 0, 0, 0, 0};
+
+        String[] infoChartNames = {
+                "有形性","可靠性","响应性","保证性","移情性"
+        };
+        List<String[]> scoresList = getServiceInfo_withScore(serviceID);
+        for (String[] entry : scoresList){
+            String key = entry[0];
+            int value = Integer.parseInt(entry[2]);
+            if (tangibility.contains(key)) infoChartValue[0] += value;
+            else if (reliability.contains(key)) infoChartValue[1] += value;
+            else if (responsiveness.contains(key)) infoChartValue[2] += value;
+            else if (guarantee.contains(key)) infoChartValue[3] += value;
+            else if (empathy.contains(key)) infoChartValue[4] += value;
+        }
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        String rowKey = "得分";
+        for (int i = 0; i < infoChartNames.length; i++){
+            Comparable<String> colKey = infoChartNames[i];
+            dataset.addValue(infoChartValue[i], rowKey, colKey);
+        }
+
+        System.out.println(Arrays.toString(infoChartValue));
+
+        return spiderChart(dataset, chartTitle);
     }
 
 }

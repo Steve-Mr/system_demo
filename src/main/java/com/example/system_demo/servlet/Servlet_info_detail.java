@@ -5,11 +5,14 @@ import com.example.system_demo.repository.repository_process;
 import com.example.system_demo.repository.repository_score;
 import com.example.system_demo.repository.repository_service;
 import com.example.system_demo.model.model_score;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.SQLException;
 
 @WebServlet(name = "Servlet_info_detail", value = "/Servlet_info_detail")
@@ -29,6 +32,7 @@ public class Servlet_info_detail extends HttpServlet {
         }
 
         try {
+            request.setAttribute("service_id", serviceID);
             request.setAttribute("score_info_detail", repository_service.getServiceInfo_withScore(serviceID));
             request.setAttribute("process_results_detail", repository_process.getProcessResults(serviceID));
             request.setAttribute("eval_detail_stars", repository_eval.getServiceEvalStars(serviceID));
