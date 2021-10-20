@@ -1,7 +1,12 @@
 package com.example.system_demo.repository;
 
 import com.example.system_demo.util.util;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
+import org.jfree.data.category.DefaultCategoryDataset;
 
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -68,6 +73,43 @@ public class repository_process {
                 num_unfinished_order_provider,
                 num_unfinished_deliver_user,
                 num_unfinished_deliver_provider);
+    }
+
+    public static JFreeChart getProcessChart(int serviceID) throws SQLException {
+        String title = "服务过程评价结果图";
+        String categoryAxisLabel = "阶段";
+        String valueAxisLabel = "人数";
+
+        String userC = "用户取消";
+        String providerC = "商家取消";
+
+        String reservation = "预约阶段";
+        String order = "下单阶段";
+        String deliver = "派单阶段";
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        List<Integer> list = getProcessResults(serviceID);
+        dataset.addValue(list.get(2), userC, reservation);
+        dataset.addValue(list.get(3), providerC, reservation);
+        dataset.addValue(list.get(4), userC, order);
+        dataset.addValue(list.get(5), providerC, order);
+        dataset.addValue(list.get(6), userC, deliver);
+        dataset.addValue(list.get(7), providerC, deliver);
+
+        //创建主题样式
+        StandardChartTheme mChartTheme = new StandardChartTheme("CN");
+        //设置标题字体
+        mChartTheme.setExtraLargeFont(new Font("黑体", Font.BOLD, 20));
+        //设置轴向字体
+        mChartTheme.setLargeFont(new Font("宋体", Font.CENTER_BASELINE, 15));
+        //设置图例字体
+        mChartTheme.setRegularFont(new Font("宋体", Font.CENTER_BASELINE, 15));
+        //应用主题样式
+        ChartFactory.setChartTheme(mChartTheme);
+
+        return ChartFactory.createBarChart(
+                title, categoryAxisLabel, valueAxisLabel, dataset
+        );
     }
 
     public static double Calculator_service_process(int serviceID) throws SQLException {

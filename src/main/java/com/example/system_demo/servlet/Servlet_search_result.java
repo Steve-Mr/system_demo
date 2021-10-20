@@ -29,15 +29,14 @@ public class Servlet_search_result extends HttpServlet {
         System.out.println(keyWord);
 
         try {
-            List<Map.Entry<Integer, String>> list = getServiceList(keyWord);
+            List<String[]> list = getServiceList(keyWord);
+            //List<Map.Entry<Integer, String>> list = getServiceList(keyWord);
             if (list.size() != 0){
-                request.setAttribute("list_result", list);
-
-                for (Map.Entry<Integer, String> item : list){
-                    System.out.println(item.getKey());
-                }
+                //request.setAttribute("list_result", list);
+                request.setAttribute("list_service", list);
             }
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/search_results.jsp");
+            //RequestDispatcher requestDispatcher = request.getRequestDispatcher("/search_results.jsp");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/service_list.jsp");
             requestDispatcher.forward(request,response);
         } catch (SQLException e) {
             e.printStackTrace();

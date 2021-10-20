@@ -11,7 +11,12 @@ public class util_graph {
         if (dataset != null){
             SpiderWebPlot spiderWebPlot = new SpiderWebPlot(dataset);
             return new JFreeChart(title, spiderWebPlot);
-        }
-        else return null;
+        } else return null;
     }
+
+/*    public static JFreeChart barChart(DefaultCategoryDataset dataset, String title){
+        if (dataset != null){
+
+        } else return null;
+    }*/
 }

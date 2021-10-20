@@ -13,43 +13,78 @@ import static com.example.system_demo.util.util_graph.spiderChart;
 
 public class repository_service {
 
-    public static ArrayList<Map.Entry<Integer, String>> getServiceList(){
+//    public static ArrayList<Map.Entry<Integer, String>> getServiceList(){
+//        Connection connection = util.initConnection();
+//        ArrayList<Map.Entry<Integer, String>> list_service_name = new ArrayList<>();
+//        String sql = "select serviceID,serviceName from service";
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            while (resultSet.next()){
+//                list_service_name.add(new AbstractMap.SimpleEntry<>(
+//                        resultSet.getInt("serviceID"),
+//                        resultSet.getString("serviceName")));
+//            }
+//            util.close(connection, preparedStatement, resultSet);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return list_service_name;
+//    }
+
+    public static ArrayList<String[]> getServiceList() throws SQLException {
         Connection connection = util.initConnection();
-        ArrayList<Map.Entry<Integer, String>> list_service_name = new ArrayList<>();
-        String sql = "select serviceID,serviceName from service";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                list_service_name.add(new AbstractMap.SimpleEntry<>(
-                        resultSet.getInt("serviceID"),
-                        resultSet.getString("serviceName")));
-            }
-            util.close(connection, preparedStatement, resultSet);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        ArrayList<String[]> list_service = new ArrayList<>();
+        String sql = "select serviceID,serviceName,servicePicture from service";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            list_service.add(new String[]{
+                    String.valueOf(resultSet.getInt("serviceID")),
+                    resultSet.getString("serviceName"),
+                    resultSet.getString("servicePicture")
+            });
         }
-        return list_service_name;
+        util.close(connection, preparedStatement, resultSet);
+        return list_service;
     }
 
-    public static ArrayList<Map.Entry<Integer, String>> getServiceList(String keyWord) throws SQLException {
+//    public static ArrayList<Map.Entry<Integer, String>> getServiceList(String keyWord) throws SQLException {
+//
+//        System.out.println(keyWord);
+//        System.out.println("测试");
+//
+//        Connection connection = util.initConnection();
+//        ArrayList<Map.Entry<Integer, String>> list = new ArrayList<>();
+//        String sql = "select serviceID, serviceName from service where serviceName like ?";
+//        //String sql = "select serviceID, serviceName from service where serviceName = ?";
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//        //preparedStatement.setString(1, keyWord);
+//        preparedStatement.setString(1, "%" + keyWord + "%");
+//        ResultSet resultSet = preparedStatement.executeQuery();
+//        while (resultSet.next()){
+//            list.add(new AbstractMap.SimpleEntry<>(
+//                    resultSet.getInt("serviceID"),
+//                    resultSet.getString("serviceName")
+//            ));
+//        }
+//        util.close(connection, preparedStatement, resultSet);
+//        return list;
+//    }
 
-        System.out.println(keyWord);
-        System.out.println("测试");
-
+    public static ArrayList<String[]> getServiceList(String keyWord) throws SQLException {
         Connection connection = util.initConnection();
-        ArrayList<Map.Entry<Integer, String>> list = new ArrayList<>();
-        String sql = "select serviceID, serviceName from service where serviceName like ?";
-        //String sql = "select serviceID, serviceName from service where serviceName = ?";
+        ArrayList<String[]> list = new ArrayList<>();
+        String sql = "select serviceID, serviceName, servicePicture from service where serviceName like ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        //preparedStatement.setString(1, keyWord);
         preparedStatement.setString(1, "%" + keyWord + "%");
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()){
-            list.add(new AbstractMap.SimpleEntry<>(
-                    resultSet.getInt("serviceID"),
-                    resultSet.getString("serviceName")
-            ));
+            list.add(new String[]{
+                    String.valueOf(resultSet.getInt("serviceID")),
+                    resultSet.getString("serviceName"),
+                    resultSet.getString("servicePicture")
+            });
         }
         util.close(connection, preparedStatement, resultSet);
         return list;

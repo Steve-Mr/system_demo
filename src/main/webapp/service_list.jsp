@@ -9,6 +9,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
+    <style>
+        .img {
+            width:100px;
+        }
+
+        .img img {
+            max-width:100%;
+        }
+    </style>
     <title>Service List</title>
 </head>
 <body>
@@ -20,8 +29,12 @@
 
 所有服务如下：<br>
 <c:forEach items="${list_service}" var="list_service">
-     <a href="Servlet_info_detail?serviceID=${list_service.getKey()}">
-             ${list_service.getKey()}  ${list_service.getValue()}<br>
+    <div class="img">
+    <img  src="${pageContext.request.contextPath}${list_service[2]}" alt="">
+    </div>
+    <br>
+     <a href="Servlet_info_detail?serviceID=${list_service[0]}">
+             ${list_service[0]}  ${list_service[1]}<br>
      </a>
 </c:forEach>
 </body>

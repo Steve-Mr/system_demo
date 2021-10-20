@@ -31,7 +31,7 @@
 </c:forEach>
 <br>
 <br>
-<img src="Servlet_image?imageType=INFO&serviceID=${service_id}" alt="产品服务信息得分图">
+<img src="Servlet_graph?imageType=INFO&serviceID=${service_id}" alt="产品服务信息得分图">
 <br>
 <br>
 服务过程结果详情：<br>
@@ -57,6 +57,11 @@
 
     </tr>
 </table>
+
+<br>
+<br>
+
+<img src="Servlet_graph?imageType=PROCESS&serviceID=${service_id}" alt="产品服务过程柱状图">
 
 <br>
 <br>
