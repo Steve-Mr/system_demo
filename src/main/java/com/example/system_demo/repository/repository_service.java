@@ -126,6 +126,53 @@ public class repository_service {
         return score;
     }
 
+    public static int Calculator_info_loss(int serviceID) throws SQLException {
+        int loss = 0;
+
+        ArrayList<String> blanks = new ArrayList<>();
+
+        String sql = "select * from service where serviceID = ?";
+        Connection connection = util.initConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, serviceID);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()){
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            int columnCount = resultSetMetaData.getColumnCount();
+            for (int i=1; i<=columnCount; i++){
+                if(resultSet.getObject(i) == null){
+                    blanks.add(resultSetMetaData.getColumnName(i));
+                }
+            }
+        }
+
+        ArrayList<Iterator<String>> iterators = new ArrayList<>();
+        iterators.add(tangibility.iterator());
+        iterators.add(reliability.iterator());
+        iterators.add(responsiveness.iterator());
+        iterators.add(guarantee.iterator());
+        iterators.add(empathy.iterator());
+
+        for (Iterator<String> iterator: iterators) {
+            loss += loss(iterator, blanks);
+        }
+
+        return loss;
+    }
+
+    private static int loss(Iterator<String> iterator, ArrayList<String> blanks){
+        boolean notNull = false;
+        while (iterator.hasNext()){
+            if (!blanks.contains(iterator.next())){
+                notNull = true;
+                break;
+            }
+        }
+
+        return notNull ? 0 : 10;
+    }
+
     /*
 
     public static ArrayList<Map.Entry<String, Integer>> getServiceInfo_withScore(int serviceID) throws SQLException {

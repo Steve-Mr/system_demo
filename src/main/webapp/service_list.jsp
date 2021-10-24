@@ -27,15 +27,15 @@
     <button type="submit">Search</button>
 </form>
 
-所有服务如下：<br>
+所有服务如下：<br><br>
 <c:forEach items="${list_service}" var="list_service">
     <div class="img">
     <img  src="${pageContext.request.contextPath}${list_service[2]}" alt="">
     </div>
-    <br>
      <a href="Servlet_info_detail?serviceID=${list_service[0]}">
              ${list_service[0]}  ${list_service[1]}<br>
      </a>
+    <br>
 </c:forEach>
 </body>
 </html>

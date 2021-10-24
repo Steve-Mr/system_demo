@@ -23,6 +23,12 @@ public class Servlet_info_detail extends HttpServlet {
         int serviceID = Integer.parseInt(request.getParameter("serviceID"));
         System.out.println(request.getParameter("serviceID"));
 
+        try {
+            System.out.println("loss is " + repository_service.Calculator_info_loss(serviceID));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         model_score score = repository_score.getServiceScore(serviceID);
         if (score != null){
             request.setAttribute("msg_score_info", null);

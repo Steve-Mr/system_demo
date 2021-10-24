@@ -53,7 +53,7 @@ public class UTIL_CONSTANTS {
 
     //保证性
     public static final Set<String> guarantee = new HashSet<>(
-            Arrays.asList("serviceProcedure", "serviceLeagalInfo")
+            Arrays.asList("serviceProcedure", "serviceLegalInfo")
     );
 
     //移情性
